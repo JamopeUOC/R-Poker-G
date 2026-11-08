@@ -1,1 +1,1 @@
-draw_text(20, 20, global.gameState)
+//draw_text(20, 20, global.gameState)

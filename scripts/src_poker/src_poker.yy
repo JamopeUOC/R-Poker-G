@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"src_poker",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"src_poker",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

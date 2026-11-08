@@ -1,1 +1,0 @@
-givecards = true;

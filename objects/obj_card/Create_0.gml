@@ -4,7 +4,8 @@ suit = "clubs";
 reference = -1;
 
 showing_front = false;
-turning = true;
+hidden = (owner != noone && owner.object_index != obj_player);
+turning = !hidden;
 turn_speed = 0.2;
 
 selected = false;
@@ -16,8 +17,6 @@ start_x = 0;
 start_y = 0;
 
 moving = true;
-
-owner = noone;
 index = 0;
 
 mousein = false;
@@ -29,3 +28,7 @@ random_sin = random_range(-360, 360);
 start_depth = depth;
 target_xscale = 1;
 target_yscale = 1;
+
+discarded = false;
+
+no_redraw = false;

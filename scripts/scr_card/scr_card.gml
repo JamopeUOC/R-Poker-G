@@ -44,12 +44,13 @@ function addCardToHand(_obj) {
             
             array_delete(global.deck, _index, 1);
             
-            var _new_card = instance_create_layer(531, 176, "Instances", obj_card);
+            var _new_card = instance_create_layer(531, 176, "Instances", obj_card, {
+                owner: other
+            });
             
             with(_new_card) {
                 value = card.value;
                 suit = card.suit;
-                owner = other;
                 index = _card_index;
                 reference = card;
                 
@@ -68,4 +69,43 @@ function addCardToHand(_obj) {
             return false;
         }
     }
+}
+
+function maxDiscardsDone(){
+     return obj_game.discardsDone >= obj_game.maxDiscards
+}
+function hand_busy(_owner) {
+    for (var i = 0; i < array_length(_owner.hand); i++) {
+        var _o = _owner.hand[i].object;
+        if (instance_exists(_o) && (_o.moving || _o.discarded || _o.turning)) return true;
+    }
+    return false;
+}
+
+//Descarta cartas de una mano
+function discardCardFromHand(_card_inst, _draw = true) {
+    var _player = _card_inst.owner;
+    var _ref = _card_inst.reference;
+
+    with (_player) {
+        var _i = array_get_index(hand, _ref);
+        if (_i != -1) array_delete(hand, _i, 1);
+
+        var _s = array_get_index(selected_cards, _ref);
+        if (_s != -1) array_delete(selected_cards, _s, 1);
+
+        for (var i = 0; i < array_length(hand); i++) {
+            var _inst = hand[i].object;
+            if (instance_exists(_inst) && !_inst.discarded) {
+                _inst.index = i;
+                _inst.moving = true;
+            }
+        }
+
+        //Añadir nuevas cartas
+        if (_draw) addCardToHand(id);
+    }
+
+    _ref.object = noone;
+    array_push(global.deck, _ref);
 }

@@ -1,0 +1,1 @@
+shakeLifes = false;

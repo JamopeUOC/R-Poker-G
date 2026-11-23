@@ -54,8 +54,8 @@
   ],
   "name":"Room1",
   "parent":{
-    "name":"R-Poker-G",
-    "path":"R-Poker-G.yyp",
+    "name":"Rooms",
+    "path":"folders/Rooms.yy",
   },
   "parentRoom":null,
   "physicsSettings":{

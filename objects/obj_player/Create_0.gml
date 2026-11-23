@@ -6,3 +6,5 @@ max_cards_selected = 5;
 
 maxLifes = 3;
 lifes = maxLifes;
+
+shakeLifes = false;

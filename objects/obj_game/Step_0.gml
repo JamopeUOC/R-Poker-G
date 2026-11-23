@@ -29,8 +29,14 @@ switch (global.gameState) {
                 //comparar y quitar vida
                 case 1:
                     var _result = poker_compare(obj_player.selected_cards, obj_enemy.selected_cards);
-                    if (_result > 0) obj_enemy.lifes--;
-                    else if (_result < 0) obj_player.lifes--;
+                    if (_result > 0) {
+                        obj_enemy.lifes--;
+                        obj_enemy.shakeLifes = true;
+                    }
+                    else if (_result < 0) {
+                        obj_player.lifes--;
+                        obj_player.shakeLifes = true;
+                    }
 
                     res_timer = 60;
                     res_state = 2;

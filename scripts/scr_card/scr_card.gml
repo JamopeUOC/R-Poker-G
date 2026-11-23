@@ -13,19 +13,19 @@ global.deck = [];
 global.maxCardsInHand = 8;
 global.maxCardsSelected = 5;
 
-//Añadimos las cartas al mazo
-for(var i = 0; i < 13; i++) {
-    var card1 = new Card(i+1, "hearts");
-    var card2 = new Card(i+1, "clubs");
-    var card3 = new Card(i+1, "diamonds");
-    var card4 = new Card(i+1, "spades");
-    
-    array_push(global.deck, card1);
-    array_push(global.deck, card2);
-    array_push(global.deck, card3);
-    array_push(global.deck, card4);
-    
+//Función para resetear el mazo
+function resetDeck() {
+    global.deck = [];
+
+    for (var i = 0; i < 13; i++) {
+        array_push(global.deck, new Card(i + 1, "hearts"));
+        array_push(global.deck, new Card(i + 1, "clubs"));
+        array_push(global.deck, new Card(i + 1, "diamonds"));
+        array_push(global.deck, new Card(i + 1, "spades"));
+    }
 }
+
+resetDeck();
 
 ///Añade una carta a una mano, tanto del jugador como del rival
 function addCardToHand(_obj) {

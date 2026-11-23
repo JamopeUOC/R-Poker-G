@@ -1,4 +1,5 @@
 // Inherit the parent event
+if (global.gameState != GameState.PLAYERTURN) exit;
 event_inherited();
 
 with (obj_player) {

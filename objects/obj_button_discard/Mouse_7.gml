@@ -1,6 +1,7 @@
 // Inherit the parent event
-event_inherited();
 
+if (global.gameState != GameState.PLAYERTURN) exit;
+event_inherited();
 with (obj_player) {
     if (array_length(selected_cards) > 0 && !maxDiscardsDone()) {
         for (var i = 0; i < array_length(selected_cards); i++) {

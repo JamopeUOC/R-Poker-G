@@ -83,10 +83,10 @@ switch (global.gameState) {
                 case 4:
                     if (!obj_giveCards.givecards && !hand_busy(obj_player) && !hand_busy(obj_enemy)) {
                         discardsDone = 0;
+                        changesDone = 0;
+                        eraseDone = 0;
                         obj_enemy.discards_done = 0;
-
-                        startsplayer = !startsplayer;
-                        global.gameState = startsplayer ? GameState.PLAYERTURN : GameState.ENEMYTURN;
+                        global.gameState = GameState.PLAYERTURN
                         res_state = 0;
                     }
                     break;

@@ -74,6 +74,15 @@ function addCardToHand(_obj) {
 function maxDiscardsDone(){
      return obj_game.discardsDone >= obj_game.maxDiscards
 }
+
+function maxChangesDone(){
+     return obj_game.changesDone >= obj_game.maxChanges
+}
+
+function maxErasesDone(){
+     return obj_game.eraseDone >= obj_game.maxErase
+}
+
 function hand_busy(_owner) {
     for (var i = 0; i < array_length(_owner.hand); i++) {
         var _o = _owner.hand[i].object;

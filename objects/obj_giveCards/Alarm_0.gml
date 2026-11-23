@@ -6,7 +6,7 @@ if (addCardToHand(instance_find(obj_player, 0))) {
     } else {
         givecards = false;
         if (global.gameState == GameState.SETUP) {
-            global.gameState = obj_game.startsplayer ? GameState.PLAYERTURN : GameState.ENEMYTURN;
+            global.gameState = GameState.PLAYERTURN
         }
     }
 }

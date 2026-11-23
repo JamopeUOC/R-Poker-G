@@ -74,11 +74,7 @@ switch (ai_state) {
 
     // 4: terminar turno
     case 4:
-        if (obj_game.startsplayer) {
-            global.gameState = GameState.RESOLUTION;
-        } else {
-            global.gameState = GameState.PLAYERTURN;
-        }
+        global.gameState = GameState.RESOLUTION;
         ai_state = 0;
         break;
 }

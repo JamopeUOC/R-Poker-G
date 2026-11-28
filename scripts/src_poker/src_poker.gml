@@ -10,6 +10,9 @@ enum COMBINATIONS {
     STRAIGHT_FLUSH,
     ROYAL_FLUSH
 }
+global.maxDiscards = 4;
+global.maxErases = 1;
+global.maxSwaps = 2;
 
 function card_rank(_v) {
     return (_v == 1) ? 14 : _v;

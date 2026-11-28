@@ -34,6 +34,9 @@ switch (ai_state) {
             selected_cards = [];
             ai_timer = 40;
             ai_state = 1;
+            
+            //35% de probabilidad
+            want_swap = (irandom(99) < 99);
         }
         break;
 
@@ -41,7 +44,43 @@ switch (ai_state) {
     case 1:
         ai_best = enemy_find_best(hand);
 
-        var _discards = (discards_done < max_discards)
+        //Borrar toda la mano
+        if (eraseDone < global.maxErases && enemy_should_erase_hand(hand, ai_best)) {
+            for (var i = 0; i < array_length(hand); i++) {
+                var _inst = hand[i].object;
+                if (instance_exists(_inst)) {
+                    _inst.discarded = true;
+                    _inst.moving = true;
+                    _inst.selected = false;
+                }
+            }
+            
+            //sfx
+            var pitch = random_range(0.64, 0.85);
+            audio_play_sound(snd_sfx_card1, 1, false, 1, 0, pitch);
+            
+            eraseDone++;
+            ai_state = 2;
+            break;
+        }
+        
+        //Intercambiar con el jugador
+        if (want_swap && swaps_done < global.maxSwaps && !hand_busy(obj_player)) {
+            var _plan = enemy_plan_swap(hand, ai_best);
+            if (_plan != undefined) {
+                for (var i = 0; i < array_length(_plan.mine); i++) {
+                    swapCards(_plan.theirs[i], _plan.mine[i]);
+                }
+                obj_player.selected_cards_enemy = [];
+                swaps_done++;
+                want_swap = false;
+                ai_state = 2;
+                break;
+            }
+            want_swap = false;
+        }
+        
+        var _discards = (discards_done < global.maxDiscards)
             ? enemy_choose_discards(hand, ai_best)
             : [];
 
@@ -51,6 +90,11 @@ switch (ai_state) {
                 if (instance_exists(_inst)) {
                     _inst.discarded = true;
                     _inst.moving = true;
+                    
+                    
+                    //sfx
+                    var pitch = random_range(0.64, 0.85);
+                    audio_play_sound(snd_sfx_card1, 1, false, 1, 0, pitch);
                 }
             }
             discards_done++;
@@ -80,6 +124,11 @@ switch (ai_state) {
             if (instance_exists(_card.object)) _card.object.selected = true;
             ai_pick_index++;
             ai_timer = 15;
+            
+            //sfx
+            var pitch = random_range(0.85, 1.15);
+            audio_play_sound(snd_sfx_card1, 1, false, 1, 0, pitch);
+            
         } else {
             ai_timer = 45;
             ai_state = 4;

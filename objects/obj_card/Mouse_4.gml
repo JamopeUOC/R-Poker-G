@@ -36,4 +36,8 @@ if(global.gameState == GameState.PLAYERTURN) {
             }
         }
     }
+    
+    //sfx
+    var pitch = random_range(0.85, 1.15);
+    audio_play_sound(snd_sfx_card1, 1, false, 1, 0, pitch);
 }

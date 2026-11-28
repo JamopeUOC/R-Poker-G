@@ -100,3 +100,85 @@ function enemy_choose_discards(_hand, _best) {
     }
     return _discards;
 }
+
+//Ver si el enemigo quiere borrarse la mano
+function enemy_should_erase_hand(_hand, _best) {
+    //Con escalera o mejor ya hecha, nunca
+    if (_best.comb >= COMBINATIONS.STRAIGHT) return false;
+
+    //Si ya tiene proyecto de color o escalera, mejor que no
+    if (array_length(enemy_flush_draw(_hand)) == 4) return false;
+    if (array_length(enemy_straight_draw(_hand)) == 4) return false;
+
+    //Solo carta alta y sin proyectos, la borra siempre porque su mano es muy mala
+    if (_best.comb == COMBINATIONS.HIGH_CARD) return true;
+
+    //Pareja baja (diría que hasta el 8), a veces se la juega, a veces borra
+    if (_best.comb == COMBINATIONS.PAIR) {
+        var _counts = array_create(14, 0);
+        for (var i = 0; i < array_length(_hand); i++) _counts[_hand[i].value]++;
+
+        for (var v = 1; v <= 13; v++) {
+            if (_counts[v] >= 2) {
+                //borrará la mano con un 50% de probabilidaf
+                if (card_rank(v) <= 8) return (irandom(99) < 50);
+                break;
+            }
+        }
+    }
+
+    return false;
+}
+
+//Coge n cartas al azar de la mano del jugador (sin las que va a jugar porque rompería un poco el juego)
+function enemy_pick_random_player_cards(_n) {
+    var _pool = [];
+    with (obj_player) {
+        for (var i = 0; i < array_length(hand); i++) {
+            var _c = hand[i];
+            if (array_get_index(selected_cards, _c) == -1 && instance_exists(_c.object)) {
+                array_push(_pool, _c);
+            }
+        }
+    }
+
+    //lo mezcla
+    for (var i = array_length(_pool) - 1; i > 0; i--) {
+        var _j = irandom(i);
+        var _tmp = _pool[i];
+        _pool[i] = _pool[_j];
+        _pool[_j] = _tmp;
+    }
+
+    var _picked = [];
+    for (var i = 0; i < min(_n, array_length(_pool)); i++) {
+        array_push(_picked, _pool[i]);
+    }
+    return _picked;
+}
+
+//Devuelve { mine[], theirs[] } o undefined
+function enemy_plan_swap(_hand, _best) {
+    
+    //Con escalera o mejor, no arriesga
+    if (_best.comb >= COMBINATIONS.STRAIGHT) return undefined;
+
+    //Sus cartas malas (las que descartaría) de menor a mayor valor
+    var _junk = enemy_choose_discards(_hand, _best);
+    if (array_length(_junk) == 0) return undefined;
+    array_sort(_junk, function(a, b) { 
+        return card_rank(a.value) - card_rank(b.value); 
+    });
+
+    var _n = irandom_range(1, min(3, array_length(_junk)));
+    var _theirs = enemy_pick_random_player_cards(_n);
+    _n = min(_n, array_length(_theirs));
+    if (_n == 0) return undefined;
+
+    var _mine = [];
+    for (var i = 0; i < _n; i++) {
+        array_push(_mine, _junk[i]);
+    }
+
+    return { mine: _mine, theirs: _theirs };
+}

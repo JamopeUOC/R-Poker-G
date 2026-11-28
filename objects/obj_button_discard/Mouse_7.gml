@@ -10,6 +10,10 @@ with (obj_player) {
                 _inst.discarded = true;
                 _inst.moving = true;
                 _inst.selected = false;
+                
+                //sfx
+                var pitch = random_range(0.64, 0.85);
+                audio_play_sound(snd_sfx_card1, 1, false, 1, 0, pitch);
             }
         }
         selected_cards = [];

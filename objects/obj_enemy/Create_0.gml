@@ -10,6 +10,9 @@ ai_best = undefined;
 ai_pick_index = 0;
 
 discards_done = 0;
-max_discards = 2;
+eraseDone = 0;
+
+swaps_done = 0;
+want_swap = false;
 
 shakeLifes = false;

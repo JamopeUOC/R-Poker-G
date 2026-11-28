@@ -21,6 +21,10 @@ switch (global.gameState) {
                                 _inst.turning = true;
                             }
                         }
+                        
+                        //sfx
+                        var pitch = random_range(0.64, 0.85);
+                        audio_play_sound(snd_sfx_card1, 1, false, 1, 0, pitch);
                     }
                     res_timer = 90;
                     res_state = 1;
@@ -89,9 +93,11 @@ switch (global.gameState) {
                 case 4:
                     if (!obj_giveCards.givecards && !hand_busy(obj_player) && !hand_busy(obj_enemy)) {
                         discardsDone = 0;
-                        changesDone = 0;
+                        swapsDone = 0;
                         eraseDone = 0;
                         obj_enemy.discards_done = 0;
+                        obj_enemy.erase_done = 0;
+                        obj_enemy.swaps_done = 0;
                         global.gameState = GameState.PLAYERTURN
                         res_state = 0;
                     }

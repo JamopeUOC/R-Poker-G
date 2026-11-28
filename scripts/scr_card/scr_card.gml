@@ -64,6 +64,10 @@ function addCardToHand(_obj) {
             
             card.object = _new_card;
             
+            //sfx
+            var pitch = random_range(0.85, 1.15);
+            audio_play_sound(snd_sfx_card1, 1, false, 1, 0, pitch);
+            
             return true;
         } else {
             return false;
@@ -72,15 +76,15 @@ function addCardToHand(_obj) {
 }
 
 function maxDiscardsDone(){
-     return obj_game.discardsDone >= obj_game.maxDiscards
+     return obj_game.discardsDone >= global.maxDiscards
 }
 
 function maxChangesDone(){
-     return obj_game.changesDone >= obj_game.maxChanges
+     return obj_game.swapsDone >= global.maxSwaps
 }
 
 function maxErasesDone(){
-     return obj_game.eraseDone >= obj_game.maxErase
+     return obj_game.eraseDone >= global.maxErases
 }
 
 function hand_busy(_owner) {
@@ -89,6 +93,52 @@ function hand_busy(_owner) {
         if (instance_exists(_o) && (_o.moving || _o.discarded || _o.turning)) return true;
     }
     return false;
+}
+
+function swapCards(_pCard, _eCard) {
+    var _pIdx = array_get_index(obj_player.hand, _pCard);
+    var _eIdx = array_get_index(obj_enemy.hand, _eCard);
+    if (_pIdx == -1 || _eIdx == -1) return false;
+
+    var _pInst = _pCard.object;
+    var _eInst = _eCard.object;
+    if (!instance_exists(_pInst) || !instance_exists(_eInst)) return false;
+
+    //Intercambiar en los arrays de las manos
+    obj_player.hand[_pIdx] = _eCard;
+    obj_enemy.hand[_eIdx] = _pCard;
+
+    //La carta del jugador pasa al rival boca abajo
+    _pInst.owner = obj_enemy;
+    _pInst.index = _eIdx;
+    _pInst.hidden = true;
+    _pInst.turning = false;
+    _pInst.showing_front = false;
+
+    //La carta del rival pasa al jugador y se gira
+    _eInst.owner = obj_player;
+    _eInst.index = _pIdx;
+    _eInst.hidden = false;
+    _eInst.turning = true;
+
+    //Deseleccionar y animar hacia la nueva posición
+    var _tmpDepth = _pInst.depth;
+    _pInst.depth = _eInst.depth;
+    _eInst.depth = _tmpDepth;
+
+    _pInst.selected = false;
+    _eInst.selected = false;
+    _pInst.mousein = false;
+    _eInst.mousein = false;
+    _pInst.moving = true;
+    _eInst.moving = true;
+    
+    
+    //sfx
+    var pitch = random_range(0.75, 1);
+    audio_play_sound(snd_sfx_card1, 1, false, 1, 0, pitch);
+
+    return true;
 }
 
 //Descarta cartas de una mano

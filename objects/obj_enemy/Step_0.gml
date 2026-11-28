@@ -36,7 +36,7 @@ switch (ai_state) {
             ai_state = 1;
             
             //35% de probabilidad
-            want_swap = (irandom(99) < 99);
+            want_swap = (irandom(99) < 35);
         }
         break;
 
